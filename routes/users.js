@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const service = require('../services/users')
+const service = require('../services/users');
 
 // Middleware to check JWT
-const private = require('../port-russell-api/middlewares/private');
+const private = require('../middlewares/private');
 
 router.get('/:id', private.checkJWT, service.getById);
 router.put('/add', service.add);

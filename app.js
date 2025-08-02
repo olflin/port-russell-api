@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
@@ -7,6 +6,10 @@ const cors = require('cors')
 const indexRouter = require('./routes/index');
 const mongodb = require('./db/mongo')
 const usersRouter = require('./routes/users');
+
+const path = require('path');
+const file = require('./models/file');
+const filesrouter = require('./routes/files');
 
 mongodb.initClientDbConnection();
 
@@ -22,9 +25,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use('/files', filesrouter);   
 
 app.use(function(req, res, next) {
     res.status(404).json({name: 'API', version: '1.0', status: 404, message: 'not_found'});
