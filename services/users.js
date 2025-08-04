@@ -2,110 +2,79 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const SECRET_KEY = process.env.SECRET_KEY;
 
-exports.authenticate = async (req, res, next) => {
-    const { email, password } = req.body;
+// GET /users
+exports.getAll = async (req, res) => {
+  const users = await User.find({}, '-password -__v');
+  res.status(200).json(users);
+};
 
-    try {
-        let user = await User.findOne({ email: email }, '-__v -createdAt -updatedAt');
+// GET /users/:email
+exports.getByEmail = async (req, res) => {
+  const user = await User.findOne({ email: req.params.email }, '-password -__v');
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.status(200).json(user);
+};
 
-        if (user) {
-            bcrypt.compare(password, user.password, function(err, response) {
-                if (err) {
-                    return res.status(500).json({ error: err.message });
-                }
-                if (response) {
-                    delete user._doc.password;
-                
-                    const expireIn = 24 * 60 * 60;
+// POST /users
+exports.create = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const existing = await User.findOne({ email });
+    if (existing) return res.status(400).json({ message: 'Email already in use' });
 
-                    const token = jwt.sign({ user: user }, process.env.SECRET_KEY, { expiresIn: expireIn });
-                
-                    res.header('Authorization', 'Bearer ' + token);
-                    return res.status(200).json('authenticate_succeed');
-                }
-                return res.status(403).json('wrong_credentials');
-            });
-        } else {
-            return res.status(404).json('user_not_found');
-        }
-    } catch (error) {
-        return res.status(501).json(error);
+    const user = new User({ username, email, password });
+    await user.save();
+    res.status(201).json({ message: 'User created' });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// PUT /users/:email
+exports.update = async (req, res) => {
+  try {
+    const updateData = { ...req.body };
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
     }
-}
 
-exports.getById = async (req, res, next) => {
-    const id = req.params.id
+    const updated = await User.findOneAndUpdate(
+      { email: req.params.email },
+      updateData,
+      { new: true, runValidators: true }
+    );
 
-    try {
-        let user = await User.findById(id);
+    if (!updated) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
 
-        if (user) {
-            return res.status(200).json(user);
-        }
+// DELETE /users/:email
+exports.remove = async (req, res) => {
+  const deleted = await User.findOneAndDelete({ email: req.params.email });
+  if (!deleted) return res.status(404).json({ message: 'User not found' });
+  res.status(204).send();
+};
 
-        return res.status(404).json('user_not_found');
-    } catch (error) {
-        return res.status(501).json(error);
-    }
-}
+// POST /login
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
 
-exports.add =  async (req, res, next) => {
-    const id = req.params.id
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ message: 'Invalid credentials' });
 
-    const temp = ({
-        name : req.body.name,
-        firstname : req.body.firstname,
-        email : req.body.email,
-        password : req.body.password
-    });
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) return res.status(403).json({ message: 'Invalid credentials' });
 
-    try {
-        let user = await User.create(temp);
+  const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '24h' });
+  res.header('Authorization', 'Bearer ' + token).status(200).json({ token });
+};
 
-        return res.status(201).json(user);
-    } catch (error) {
-        return res.status(501).json(error);
-    }
-}
-
-exports.update = async (req, res, next) => {
-    const id = req.params.id
-    const temp = ({
-        name : req.body.name,
-        firstname : req.body.firstname,
-        email : req.body.email,
-        password : req.body.password
-    });
-
-    try {
-        let user = await User.findOne({_id : id});
-
-        if (user) {
-            Object.keys(temp).forEach((key) => {
-                if (!!temp[key]) {
-                    user[key] = temp[key];
-                }
-            });
-
-            await user.save();
-            return res.status(201).json(user);
-        }
-        
-        return res.status(404).json('user-not-found');
-    } catch (error) {
-        return res.status(501).json(error)
-    }
-}
-
-exports.delete = async (req, res, next) => {
-    const id = req.params.id
-
-    try {
-        await User.deleteOne({ _id : id});
-
-        return res.status(204).json('delete_ok');
-    } catch (error) {
-        return res.status(501).json(error);
-    }
-}
+// GET /logout
+exports.logout = (req, res) => {
+  res.header('Authorization', '').status(200).json({ message: 'Logged out' });
+};

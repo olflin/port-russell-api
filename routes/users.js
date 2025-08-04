@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
 const service = require('../services/users');
-
-// Middleware to check JWT
 const private = require('../middlewares/private');
 
-router.get('/:id', private.checkJWT, service.getById);
-router.put('/add', service.add);
-router.patch('/:id', private.checkJWT, service.update);
-router.delete('/:id', private.checkJWT, service.delete);
+router.get('/', private.checkJWT, service.getAll);
+router.get('/:email', private.checkJWT, service.getByEmail);
+router.post('/', service.create);
+router.put('/:email', private.checkJWT, service.update);
+router.delete('/:email', private.checkJWT, service.remove);
 
-router.post('/authenticate', service.authenticate);
+router.post('/login', service.login);
+router.get('/logout', service.logout);
 
 module.exports = router;

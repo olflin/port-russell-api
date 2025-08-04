@@ -11,6 +11,8 @@ const path = require('path');
 const file = require('./models/file');
 const filesrouter = require('./routes/files');
 
+const catwaysRouter = require('./routes/catways');
+
 mongodb.initClientDbConnection();
 
 var app = express();
@@ -33,7 +35,9 @@ app.use('/users', usersRouter);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use('/files', filesrouter);   
+app.use('/files', filesrouter);
+
+app.use('/catways', catwaysRouter);
 
 app.use(function(req, res, next) {
     res.status(404).json({name: 'API', version: '1.0', status: 404, message: 'not_found'});
