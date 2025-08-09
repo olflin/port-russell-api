@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+<section>
+  <h2><%= mode === 'create' ? 'Créer une réservation' : 'Modifier la réservation' %> — Catway #<%= catwayId %></h2>
+  <form method="post" action="<%= mode === 'create' ? '/pages/catways/' + catwayId + '/reservations' : '/pages/catways/' + catwayId + '/reservations/' + reservation._id %>">
+    <div>
+      <label>Client</label><br/>
+      <input name="clientName" required value="<%= reservation.clientName || '' %>" />
+    </div>
+    <div>
+      <label>Bateau</label><br/>
+      <input name="boatName" required value="<%= reservation.boatName || '' %>" />
+    </div>
+    <div>
+      <label>Début</label><br/>
+      <input name="startDate" type="date" required value="<%= (reservation.startDate||'').slice(0,10) %>" />
+    </div>
+    <div>
+      <label>Fin</label><br/>
+      <input name="endDate" type="date" required value="<%= (reservation.endDate||'').slice(0,10) %>" />
+    </div>
+    <button type="submit"><%= mode === 'create' ? 'Créer' : 'Enregistrer' %></button>
+  </form>
+</section>
+<%- include('../partials/footer') %>

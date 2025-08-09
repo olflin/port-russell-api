@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+<section>
+  <h2>Utilisateurs</h2>
+  <p><a href="/pages/users/new">Créer un utilisateur</a></p>
+  <% if (!users || users.length === 0) { %>
+    <p>Aucun utilisateur.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td><%= u.username %></td>
+          <td><%= u.email %></td>
+          <td>
+            <a href="/pages/users/<%= encodeURIComponent(u.email) %>/edit">Modifier</a>
+            <form method="post" action="/pages/users/<%= encodeURIComponent(u.email) %>/delete" style="display:inline" onsubmit="return confirm('Supprimer ?')">
+              <button type="submit">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+<%- include('../partials/footer') %>

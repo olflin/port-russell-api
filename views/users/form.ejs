@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+<section>
+  <h2><%= mode === 'create' ? 'Créer un utilisateur' : 'Modifier ' + user.email %></h2>
+  <form method="post" action="<%= mode === 'create' ? '/pages/users' : '/pages/users/' + encodeURIComponent(user.email) %>">
+    <div>
+      <label>Username</label><br/>
+      <input name="username" required value="<%= user.username || '' %>" />
+    </div>
+    <% if (mode === 'create') { %>
+    <div>
+      <label>Email</label><br/>
+      <input name="email" type="email" required value="<%= user.email || '' %>" />
+    </div>
+    <% } else { %>
+      <p><strong>Email:</strong> <%= user.email %></p>
+    <% } %>
+    <div>
+      <label>Mot de passe</label><br/>
+      <input name="password" type="password" <%= mode === 'create' ? 'required' : '' %> />
+      <% if (mode !== 'create') { %><small>(laisser vide pour ne pas changer)</small><% } %>
+    </div>
+    <button type="submit"><%= mode === 'create' ? 'Créer' : 'Enregistrer' %></button>
+  </form>
+</section>
+<%- include('../partials/footer') %>

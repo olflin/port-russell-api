@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+<section>
+  <h2>Catways</h2>
+  <p><a href="/pages/catways/new">Créer un catway</a></p>
+  <% if (!catways || catways.length === 0) { %>
+    <p>Aucun catway.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>État</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% catways.forEach(c => { %>
+        <tr>
+          <td><%= c.catwayNumber %></td>
+          <td><%= c.catwayType %></td>
+          <td><%= c.catwayState %></td>
+          <td>
+            <a href="/pages/catways/<%= c.catwayNumber %>/edit">Modifier</a>
+            <form method="post" action="/pages/catways/<%= c.catwayNumber %>/delete" style="display:inline" onsubmit="return confirm('Supprimer ?')">
+              <button type="submit">Supprimer</button>
+            </form>
+            <a href="/pages/catways/<%= c.catwayNumber %>/reservations">Réservations</a>
+          </td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+<%- include('../partials/footer') %>

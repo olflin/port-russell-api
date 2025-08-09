@@ -1,6 +1,12 @@
 const Catway = require('../models/catway');
 
 // GET /catways
+/**
+ * Liste tous les catways.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
 exports.getAll = async (req, res) => {
   try {
     const catways = await Catway.find();
@@ -11,6 +17,12 @@ exports.getAll = async (req, res) => {
 };
 
 // GET /catways/:id
+/**
+ * Récupère un catway par son numéro.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
 exports.getById = async (req, res) => {
   try {
     const catway = await Catway.findOne({ catwayNumber: req.params.id });
@@ -22,6 +34,12 @@ exports.getById = async (req, res) => {
 };
 
 // POST /catways
+/**
+ * Crée un catway.
+ * @param {{body:{catwayNumber:number,catwayType:'short'|'long',catwayState:string}} & import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
 exports.create = async (req, res) => {
   try {
     const { catwayNumber, catwayType, catwayState } = req.body;
@@ -34,6 +52,12 @@ exports.create = async (req, res) => {
 };
 
 // PUT /catways/:id → modifier uniquement `catwayState`
+/**
+ * Met à jour uniquement l'état d'un catway existant.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
 exports.update = async (req, res) => {
   try {
     const catway = await Catway.findOne({ catwayNumber: req.params.id });
@@ -52,6 +76,12 @@ exports.update = async (req, res) => {
 };
 
 // DELETE /catways/:id
+/**
+ * Supprime un catway par son numéro.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<void>}
+ */
 exports.remove = async (req, res) => {
   try {
     const deleted = await Catway.findOneAndDelete({ catwayNumber: req.params.id });

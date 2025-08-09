@@ -1,6 +1,13 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
+/**
+ * Middleware JWT: valide le token, expose req.decoded et renouvelle l'en-tête Authorization.
+ * Échoue avec 401 si le token est manquant ou invalide.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 exports.checkJWT = async (req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
     if (token && token.startsWith('Bearer ')) {
@@ -15,13 +22,13 @@ exports.checkJWT = async (req, res, next) => {
                 req.decoded = decoded;
 
                 const expireIn = 24 * 60 * 60; // 24 hours
-                const newToken = jwt.sign({
-                    user: decoded.user
-                },
-                 SECRET_KEY,
-                {
-                    expiresIn: expireIn
-                });
+                // Re-signe avec le même payload attendu par le reste de l'app
+                const payload = {
+                  id: decoded.id,
+                  username: decoded.username,
+                  email: decoded.email,
+                };
+                const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: expireIn });
 
                 res.header('Authorization', 'Bearer ' + newToken);
                 next();

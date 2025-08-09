@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+<section>
+  <h2>Tableau de bord</h2>
+  <p><strong>Utilisateur:</strong> <%= username %> — <%= email %></p>
+  <p><strong>Date du jour:</strong> <%= today %></p>
+
+  <h3>Réservations en cours</h3>
+  <% if (!activeReservations || activeReservations.length === 0) { %>
+    <p>Aucune réservation active aujourd'hui.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Catway</th>
+          <th>Client</th>
+          <th>Bateau</th>
+          <th>Début</th>
+          <th>Fin</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% activeReservations.forEach(r => { %>
+        <tr>
+          <td><%= r.catwayNumber %></td>
+          <td><%= r.clientName %></td>
+          <td><%= r.boatName %></td>
+          <td><%= (r.startDate||'').slice(0,10) %></td>
+          <td><%= (r.endDate||'').slice(0,10) %></td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+<%- include('partials/footer') %>
