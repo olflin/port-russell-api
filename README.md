@@ -66,7 +66,7 @@ Variables d'environnement (`.env`) :
 
 ```env
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/port_russell
+URL_MONGO=mongodb://localhost:27017/port_russell
 SECRET_KEY=your_secret_key
 ```
 
