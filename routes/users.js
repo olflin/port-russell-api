@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-var express = require('express');
-var router = express.Router();
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-=======
 const express = require('express');
 const router = express.Router();
 const service = require('../services/users');
@@ -112,6 +103,5 @@ router.post('/', service.create);
 router.get('/:email', private.checkJWT, service.getByEmail);
 router.put('/:email', private.checkJWT, service.update);
 router.delete('/:email', private.checkJWT, service.remove);
->>>>>>> devprojet
 
 module.exports = router;
