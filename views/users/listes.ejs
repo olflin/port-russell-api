@@ -1,7 +1,10 @@
 <%- include('../partials/header') %>
 <section>
   <h2>Utilisateurs</h2>
-  <p><a href="/pages/users/new">Créer un utilisateur</a></p>
+  <p><a href="/pages/users/new"><button type="button">Créer un utilisateur</button></a></p>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error"><%= error %></div>
+  <% } %>
   <% if (!users || users.length === 0) { %>
     <p>Aucun utilisateur.</p>
   <% } else { %>
@@ -19,6 +22,7 @@
           <td><%= u.username %></td>
           <td><%= u.email %></td>
           <td>
+            <a href="/pages/users/<%= encodeURIComponent(u.email) %>/details">Détails</a>
             <a href="/pages/users/<%= encodeURIComponent(u.email) %>/edit">Modifier</a>
             <form method="post" action="/pages/users/<%= encodeURIComponent(u.email) %>/delete" style="display:inline" onsubmit="return confirm('Supprimer ?')">
               <button type="submit">Supprimer</button>

@@ -1,6 +1,9 @@
 <%- include('../partials/header') %>
 <section>
   <h2><%= mode === 'create' ? 'Créer un utilisateur' : 'Modifier ' + user.email %></h2>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error"><%= error %></div>
+  <% } %>
   <form method="post" action="<%= mode === 'create' ? '/pages/users' : '/pages/users/' + encodeURIComponent(user.email) %>">
     <div>
       <label>Username</label><br/>

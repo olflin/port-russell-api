@@ -6,7 +6,7 @@
 
   <h3>Connexion</h3>
   <% if (typeof error === 'string' && error) { %>
-    <p style="color:#b00"><%= error %></p>
+    <div class="error"><%= error %></div>
   <% } %>
   <form method="post" action="/login">
     <div>

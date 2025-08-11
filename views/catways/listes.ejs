@@ -1,7 +1,10 @@
 <%- include('../partials/header') %>
 <section>
   <h2>Catways</h2>
-  <p><a href="/pages/catways/new">Créer un catway</a></p>
+  <p><a href="/pages/catways/new"><button type="button">Créer un catway</button></a></p>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error"><%= error %></div>
+  <% } %>
   <% if (!catways || catways.length === 0) { %>
     <p>Aucun catway.</p>
   <% } else { %>
@@ -21,11 +24,11 @@
           <td><%= c.catwayType %></td>
           <td><%= c.catwayState %></td>
           <td>
+            <a href="/pages/catways/<%= c.catwayNumber %>/details">Détails</a>
             <a href="/pages/catways/<%= c.catwayNumber %>/edit">Modifier</a>
             <form method="post" action="/pages/catways/<%= c.catwayNumber %>/delete" style="display:inline" onsubmit="return confirm('Supprimer ?')">
               <button type="submit">Supprimer</button>
             </form>
-            <a href="/pages/catways/<%= c.catwayNumber %>/reservations">Réservations</a>
           </td>
         </tr>
       <% }) %>

@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+<section>
+  <h2>Détails de la réservation</h2>
+  <ul>
+    <li><strong>Catway:</strong> #<%= catwayId %></li>
+    <li><strong>Client:</strong> <%= reservation.clientName %></li>
+    <li><strong>Bateau:</strong> <%= reservation.boatName %></li>
+    <li><strong>Début:</strong> <%= (reservation.startDate||'').slice(0,10) %></li>
+    <li><strong>Fin:</strong> <%= (reservation.endDate||'').slice(0,10) %></li>
+  </ul>
+  <p>
+    <a href="/pages/reservations/<%= catwayId %>/<%= reservation._id %>/edit">Modifier</a>
+    <form method="post" action="/pages/reservations/<%= catwayId %>/<%= reservation._id %>/delete" style="display:inline" onsubmit="return confirm('Supprimer cette réservation ?')">
+      <button type="submit">Supprimer</button>
+    </form>
+    <a href="/pages/reservations/listes">Retour à la liste</a>
+  </p>
+</section>
+<%- include('../partials/footer') %>

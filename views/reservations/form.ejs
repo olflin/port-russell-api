@@ -1,7 +1,25 @@
 <%- include('../partials/header') %>
 <section>
-  <h2><%= mode === 'create' ? 'Créer une réservation' : 'Modifier la réservation' %> — Catway #<%= catwayId %></h2>
-  <form method="post" action="<%= mode === 'create' ? '/pages/catways/' + catwayId + '/reservations' : '/pages/catways/' + catwayId + '/reservations/' + reservation._id %>">
+  <h2>
+    <% if (mode === 'create') { %>
+      Créer une réservation — Catway #<%= catwayId %>
+    <% } else if (mode === 'create-global') { %>
+      Créer une réservation (tous les catways)
+    <% } else { %>
+      Modifier la réservation — Catway #<%= catwayId %>
+    <% } %>
+  </h2>
+  <form method="post" action="<% if (mode === 'create-global') { %>/pages/reservations<% } else if (mode === 'edit') { %>/pages/reservations/<%= catwayId %>/<%= reservation._id %><% } else { %>/pages/reservations<% } %>">
+    <% if (mode === 'create-global') { %>
+    <div>
+      <label>Catway</label><br/>
+      <select name="catwayNumber" required>
+        <% (catways || []).forEach(c => { %>
+          <option value="<%= c.catwayNumber %>">#<%= c.catwayNumber %> — <%= c.catwayType %> — <%= c.catwayState %></option>
+        <% }) %>
+      </select>
+    </div>
+    <% } %>
     <div>
       <label>Client</label><br/>
       <input name="clientName" required value="<%= reservation.clientName || '' %>" />
@@ -18,7 +36,7 @@
       <label>Fin</label><br/>
       <input name="endDate" type="date" required value="<%= (reservation.endDate||'').slice(0,10) %>" />
     </div>
-    <button type="submit"><%= mode === 'create' ? 'Créer' : 'Enregistrer' %></button>
+    <button type="submit"><%= mode === 'create' || mode === 'create-global' ? 'Créer' : 'Enregistrer' %></button>
   </form>
 </section>
 <%- include('../partials/footer') %>
