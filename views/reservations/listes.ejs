@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+<section>
+  {{ ... }}
+  <h2>Réservations (tous les catways)</h2>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error"><%= error %></div>
+  <% } %>
+  <p>
+    <p><a href="/pages/reservations/new"><button type="button">Créer une réservation</button></a></p>
+  <% if (!reservations || reservations.length === 0) { %>
+    <p>Aucune réservation trouvée.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Catway</th>
+          <th>Client</th>
+          <th>Bateau</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservations.forEach(r => { %>
+          <tr>
+            <td>#<%= r.catwayNumber %></td>
+            <td><%= r.clientName %></td>
+            <td><%= r.boatName %></td>
+            <td><%= (r.startDate||'').slice(0,10) %></td>
+            <td><%= (r.endDate||'').slice(0,10) %></td>
+            <td>
+              <a href="/pages/reservations/<%= r.catwayNumber %>/<%= r._id %>/details">Détails</a>
+              <a href="/pages/reservations/<%= r.catwayNumber %>/<%= r._id %>/edit">Modifier</a>
+              <form method="post" action="/pages/reservations/<%= r.catwayNumber %>/<%= r._id %>/delete" style="display:inline" onsubmit="return confirm('Supprimer cette réservation ?');">
+                <button type="submit">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+<%- include('../partials/footer') %>

@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+<section>
+  <h2>Détails du catway #<%= catway.catwayNumber %></h2>
+  <ul>
+    <li><strong>Numéro:</strong> <%= catway.catwayNumber %></li>
+    <li><strong>Type:</strong> <%= catway.catwayType %></li>
+    <li><strong>État:</strong> <%= catway.catwayState %></li>
+  </ul>
+  <p>
+    <a href="/pages/catways/<%= catway.catwayNumber %>/edit">Modifier</a>
+    <form method="post" action="/pages/catways/<%= catway.catwayNumber %>/delete" style="display:inline" onsubmit="return confirm('Supprimer ce catway ?')">
+      <button type="submit">Supprimer</button>
+    </form>
+    <a href="/pages/catways/listes">Retour à la liste</a>
+  </p>
+</section>
+<%- include('../partials/footer') %>

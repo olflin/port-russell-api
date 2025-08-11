@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<section>
+  <h2>Accueil</h2>
+  <p>Application de gestion des réservations de catways du Port de Russell.</p>
+  <p><a href="/docs">Consulter la documentation de l'API</a></p>
+
+  <h3>Connexion</h3>
+  <% if (typeof error === 'string' && error) { %>
+    <div class="error"><%= error %></div>
+  <% } %>
+  <form method="post" action="/login">
+    <div>
+      <label>Email</label><br/>
+      <input name="email" type="email" required />
+    </div>
+    <div>
+      <label>Mot de passe</label><br/>
+      <input name="password" type="password" required />
+    </div>
+    <button type="submit">Se connecter</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+<section>
+  <h2>Détails de l’utilisateur</h2>
+  <ul>
+    <li><strong>Username:</strong> <%= user.username %></li>
+    <li><strong>Email:</strong> <%= user.email %></li>
+  </ul>
+  <p>
+    <a href="/pages/users/<%= encodeURIComponent(user.email) %>/edit">Modifier</a>
+    <form method="post" action="/pages/users/<%= encodeURIComponent(user.email) %>/delete" style="display:inline" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+      <button type="submit">Supprimer</button>
+    </form>
+    <a href="/pages/users/listes">Retour à la liste</a>
+  </p>
+</section>
+<%- include('../partials/footer') %>

@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+<section>
+  <h2><%= mode === 'create' ? 'Créer un catway' : 'Modifier le catway #' + catway.catwayNumber %></h2>
+  <form method="post" action="<%= mode === 'create' ? '/pages/catways' : '/pages/catways/' + catway.catwayNumber %>">
+    <% if (mode === 'create') { %>
+      <div>
+        <label>Numéro</label><br/>
+        <input name="catwayNumber" type="number" required value="<%= catway.catwayNumber %>" />
+      </div>
+      <div>
+        <label>Type</label><br/>
+        <select name="catwayType">
+          <option value="short" <%= catway.catwayType==='short'?'selected':'' %>>short</option>
+          <option value="long" <%= catway.catwayType==='long'?'selected':'' %>>long</option>
+        </select>
+      </div>
+    <% } else { %>
+      <p><strong>#</strong> <%= catway.catwayNumber %> — <strong>Type</strong> <%= catway.catwayType %></p>
+    <% } %>
+    <div>
+      <label>État</label><br/>
+      <input name="catwayState" required value="<%= catway.catwayState %>" />
+    </div>
+    <button type="submit"><%= mode === 'create' ? 'Créer' : 'Enregistrer' %></button>
+  </form>
+</section>
+<%- include('../partials/footer') %>
